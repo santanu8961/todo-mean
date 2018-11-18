@@ -1,0 +1,20 @@
+{
+  "name": "mean_todolist",
+  "version": "1.0.0",
+  "description": "My first MEAN stack Application",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon js ejs bin/www"
+  },
+  "author": "Santanu Roy",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "mongoose": "^5.3.12"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.6"
+  }
+}
