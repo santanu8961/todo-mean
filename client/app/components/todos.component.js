@@ -15,26 +15,89 @@ var TodosComponent = (function () {
         this._todoService = _todoService;
     }
     TodosComponent.prototype.ngOnInit = function () {
+        this.init();
+    };
+    // ngOnInit() {
+    //     this.init();
+    //     this.refreshData();
+    //     this.interval = setInterval(() => { 
+    //         this.refreshData(); 
+    //     }, 5000);
+    // }
+    // refreshData(){
+    //     this._todoService.getTodos()
+    //         .subscribe(todos => {
+    //             this.todos = todos;
+    //         })
+    // }
+    TodosComponent.prototype.init = function () {
         var _this = this;
         this.todos = [];
         this._todoService.getTodos()
             .subscribe(function (todos) {
-            // console.log(todos);
+            console.log("all todos " + todos);
             _this.todos = todos;
         });
     };
     TodosComponent.prototype.addTodo = function (event, todoText) {
         var _this = this;
-        // console.log(todoText.value)
-        var result;
+        console.log(todoText.value);
+        // var result;
         var newTodo = {
+            _id: '',
             text: todoText.value,
             isCompleted: false
         };
-        result = this._todoService.saveTodo(newTodo);
-        result.subscribe(function (x) {
-            _this.todos.push(newTodo);
+        console.log("To be saved", newTodo);
+        this._todoService.saveTodo(newTodo)
+            .subscribe(function (x) {
+            _this.init();
             todoText.value = '';
+        });
+    };
+    TodosComponent.prototype.setEditState = function (todo, state) {
+        if (state) {
+            todo.isEditMode = state;
+        }
+        else {
+            delete todo.isEditMode;
+        }
+    };
+    TodosComponent.prototype.updateStatus = function (todo) {
+        var _this = this;
+        var _todo = {
+            _id: todo._id,
+            text: todo.text,
+            isCompleted: !todo.isCompleted
+        };
+        this._todoService.updateTodo(_todo)
+            .subscribe(function () {
+            _this.init();
+        });
+    };
+    TodosComponent.prototype.updateTodoText = function (event, todo) {
+        var _this = this;
+        console.log(arguments);
+        if (event.which === 13) {
+            todo.text = event.target.value;
+            var _todo = {
+                _id: todo._id,
+                text: todo.text,
+                isCompleted: todo.isCompleted
+            };
+            this._todoService.updateTodo(_todo)
+                .subscribe(function () {
+                _this.setEditState(todo, false);
+            });
+        }
+        ;
+    };
+    TodosComponent.prototype.deleteTodo = function (todo) {
+        var _this = this;
+        var todos = this.todos;
+        this._todoService.deleteTodo(todo._id)
+            .subscribe(function (data) {
+            _this.init();
         });
     };
     return TodosComponent;

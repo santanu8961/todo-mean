@@ -6,16 +6,22 @@
         <button (click)='addTodo($event, todoText)' class="btn btn-primary btn-block">Create</button>
     </div>
 </div>
-
+       
 <div class="todo-list">
     <div *ngFor ="let todo of todos">
-        <div class="row">
-          <div class="col-sm-1 text-left" ><input type="checkbox"></div>
-          <div class="col-sm-7 text-center" > {{todo.text}}</div>
-          <div class="col-sm-4 text-right" > <input type="button" class="btn btn-danger pull-right" value="Delete">
-            <input type="button" class="btn btn-default pull-right" value="Edit">       </div>
+        <div class="row"style="margin:5px" >
+          <div class="col-sm-1 text-left" ><input [checked]="todo.isCompleted"(click)="updateStatus(todo)" type="checkbox"></div>
+          <div class="col-sm-7 " > 
+              <span *ngIf="!todo.isEditMode">{{todo.text}}</span>
+              <input type="text" *ngIf="todo.isEditMode" [value]="todo.text" (keypress)="updateTodoText($event,todo)">
+              <input type="button" *ngIf="todo.isEditMode"[value]="'cancel'" (click)="setEditState(todo,false)" class="btn btn-warning">
+          </div>
+          <div class="col-sm-4 text-right" >
+               <input (click)="deleteTodo(todo)" type="button" class="btn btn-danger pull-right" value="Delete">
+            <input [disabled]="todo.isCompleted" (click)="setEditState(todo,true)" type="button" class="btn btn-default pull-right" value="Edit">   
+            </div>  
         </div>
     </div>
-    </div>      
+</div>      
       
       

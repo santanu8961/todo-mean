@@ -28,7 +28,7 @@ router.get('/todo/:_id',(req,res,next)=>{
 // save todo
 router.post('/todo',(req,res,next)=>{
     var todo = req.body;
-    // console.log(todo);
+    console.log("hIT",todo);
     var todosave = new todoSchema({
         'text':todo.text,
         'isCompleted':todo.isCompleted
@@ -46,26 +46,31 @@ router.post('/todo',(req,res,next)=>{
     }
 });
 
-
 // Update todo
 router.post('/todo/:_id',(req,res,next)=>{
-    var query = {'_id':req.params.id};
+    var id = req.params._id;
+    var query = {'_id':id};
     var todo = req.body
-    var updatedtodo = {};
+    var updatedtodo = {
+        "text": todo.text,
+        "isCompleted":todo.isCompleted
+    };
 
-    if(todo.isCompleted){
-        updatedtodo.isCompleted = todo.isCompleted
-    }
+    // if(todo.isCompleted){
+    //     updatedtodo.isCompleted = todo.isCompleted
+    // }
 
-    if(todo.text){
-        updatedtodo.text = todo.text
-    }
+    // if(todo.text){
+    //     updatedtodo.text = todo.text
+    // }
+    console.log(updatedtodo)
+    console.log(query)
 
     if(!updatedtodo){
         res.status(400);
         res.json({'error':'invalid data'});
     } else {
-        todoSchema.update(query,updatedtodo,(err,result)=>{
+        todoSchema.updateOne(query,updatedtodo,(err,result)=>{
             err ? res.send(err) : res.send(result);
         })
     }
@@ -74,9 +79,9 @@ router.post('/todo/:_id',(req,res,next)=>{
 
 
 // delete todo
-router.post('/todo/:_id',(req,res,next)=>{
-    var query = {'_id':req.params.id};
-todoSchema.remove(query,err => {
+router.delete('/todo/:_id',(req,res,next)=>{
+    console.log("this is the request body"+ "  "+ req.params._id)
+todoSchema.deleteOne({"_id":req.params._id},err => {
    err ? res.send(err) : res.send('successfully deleted!')
 });
 });

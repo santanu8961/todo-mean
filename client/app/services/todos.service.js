@@ -20,9 +20,20 @@ var TodoService = (function () {
             .map(function (res) { return res.json(); });
     };
     TodoService.prototype.saveTodo = function (todo) {
-        var headers = new Headers();
+        var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/json');
         return this._http.post('/api/v1/todo', JSON.stringify(todo), { headers: headers });
+    };
+    TodoService.prototype.updateTodo = function (todo) {
+        var headers = new http_1.Headers();
+        headers.append('Content-Type', 'application/json');
+        console.log(todo);
+        return this._http.post('/api/v1/todo/' + todo._id, JSON.stringify(todo), { headers: headers });
+    };
+    TodoService.prototype.deleteTodo = function (id) {
+        console.log();
+        return this._http.delete('/api/v1/todo/' + id)
+            .map(function (res) { res.json(); });
     };
     return TodoService;
 }());
