@@ -40,8 +40,8 @@ router.post('/todo',(req,res,next)=>{
             "error":"Invalid Data"
         });
     }else{
-        todosave.save(err=>{
-            err ? console.log(err) : console.log('your data has been saved');
+        todosave.save((err,result)=>{
+            err ? console.log(err) : res.send(result)
         });
     }
 });
@@ -81,8 +81,8 @@ router.post('/todo/:_id',(req,res,next)=>{
 // delete todo
 router.delete('/todo/:_id',(req,res,next)=>{
     console.log("this is the request body"+ "  "+ req.params._id)
-todoSchema.deleteOne({"_id":req.params._id},err => {
-   err ? res.send(err) : res.send('successfully deleted!')
+todoSchema.deleteOne({"_id":req.params._id},(err,result) => {
+   err ? res.send(err) : res.send(result)
 });
 });
 
